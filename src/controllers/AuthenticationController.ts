@@ -1,14 +1,10 @@
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
-import IUser, { UserModel } from "../modelsNOSQL/userMongo";
-import { Model, HydratedDocument } from "mongoose";
 
 class AuthenticationController extends AbstractController {
   protected validateBody(type: any) {
     throw new Error("Method not implemented.");
   }
-
-  private readonly _model: Model<IUser> = UserModel;
 
   // Singleton
   private static instance: AuthenticationController;
@@ -33,14 +29,7 @@ class AuthenticationController extends AbstractController {
     try {
       const { email } = req.body;
 
-      const user: HydratedDocument<IUser> | null = await UserModel.findOne({
-        email: email,
-      });
-
-      if (!user) {
-        throw "Failed to find user";
-      }
-      res.status(200).send({ user });
+      res.status(200).send({ message: "okay" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
@@ -75,20 +64,7 @@ class AuthenticationController extends AbstractController {
           Value: email,
         },
       ]);
-      // Creación del usuario dentro de la BDNoSQL-MongoDB
-      const created_user: HydratedDocument<IUser> | null =
-        await this._model.create(
-          new UserModel({
-            name: name,
-            lastName: lastName,
-            email: email,
-            awsCognito: user.UserSub,
-          })
-        );
-
-      if (!created_user) {
-        throw "Failed to create user in MongoDB!";
-      }
+      
       res.status(201).send({ message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
@@ -113,7 +89,7 @@ class AuthenticationController extends AbstractController {
         code,
         newPassword
       );
-      res.status(200).send({ message: "Password was changed succesfully!" });
+      res.status(200).send({ message: "okay" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }

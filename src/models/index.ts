@@ -24,6 +24,34 @@ if (env === "development") {
       },
     }
   );
+} else if (env === "test") {
+  sequelize = new Sequelize(
+    config.test.database,
+    config.test.username,
+    config.test.password,
+    {
+      dialect: config.test.dialect,
+      host: config.test.host,
+      define: {
+        timestamps: false,
+        freezeTableName: true,
+      },
+    }
+  );
+} else if (env === "production") {
+  sequelize = new Sequelize(
+    config.production.database,
+    config.production.username,
+    config.production.password,
+    {
+      dialect: config.production.dialect,
+      host: config.production.host,
+      define: {
+        timestamps: false,
+        freezeTableName: true,
+      },
+    }
+  );
 }
 
 fs.readdirSync(__dirname)

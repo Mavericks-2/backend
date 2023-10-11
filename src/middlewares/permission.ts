@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 // Models
-import IUser, { UserModel, UserRoles } from "../modelsNOSQL/userMongo";
 import { HydratedDocument } from "mongoose";
+import db from "../models";
 
 export default class PermissionMiddleware {
   // Singleton
@@ -23,15 +23,16 @@ export default class PermissionMiddleware {
     next: NextFunction
   ): Promise<void> {
     try {
-      const user: HydratedDocument<IUser> | null = await UserModel.findOne({
-        awsCognito: req.aws_cognito,
+      const { aws_cognito } = req;
+      const user = await db.User.findOne({
+        where: { awsCognitoId: aws_cognito },
       });
 
       if (!user) {
         throw "Failed to find user";
       }
 
-      if (user.role === UserRoles.ADMIN) {
+      if (user.role === "ADMIN") {
         next();
       } else {
         res.status(401).send({
