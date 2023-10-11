@@ -1,13 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 import AbstractController from "../controllers/AbstractController";
-// import db from '../models';
-import mongoose from "mongoose";
+import db from "../models";
 
 class Server {
   //Atributos
   private app: express.Application;
   private port: number;
-  private mongoUri: string;
   private env: string;
 
   //Metodos
@@ -16,14 +14,12 @@ class Server {
     env: string;
     middlewares: any[];
     controllers: AbstractController[];
-    mongoUri: string;
   }) {
     this.app = express();
     this.port = appInit.port;
     this.env = appInit.env;
     this.loadMiddlewares(appInit.middlewares);
     this.loadControllers(appInit.controllers);
-    this.mongoUri = appInit.mongoUri;
   }
 
   private loadMiddlewares(middlewares: any[]): void {
@@ -38,24 +34,9 @@ class Server {
     });
   }
 
-  // Connect to the database
-  public connect(): void {
-    mongoose
-      .connect(this.mongoUri, {})
-      .then(() => {
-        console.log("Successfully connected to MongoDB 🌿");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  // Disconnect from the database
-  public disconnect(): void {
-    mongoose.disconnect().then(() => {});
-  }
-
   public async init() {
+    await db.sequelize.sync();
+
     this.app.listen(this.port, () => {
       console.log(`Server:Running 🚀 @'http://localhost:${this.port}'`);
 
@@ -73,6 +54,15 @@ class Server {
         next();
       });
     });
+
+    db.sequelize
+      .sync()
+      .then(() => {
+        console.log("Conectado a la base de datos ✅");
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
   }
 }
 
