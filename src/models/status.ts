@@ -4,7 +4,7 @@ import { UUID } from "crypto";
 import { Model } from "sequelize";
 
 interface StatusAttributes {
-  id_Status: UUID;
+  id_status: UUID;
   estado: string;
   fecha: Date;
   numIntentos: number;
@@ -16,7 +16,7 @@ interface StatusAttributes {
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Status extends Model<StatusAttributes> implements StatusAttributes {
-    id_Status!: UUID;
+    id_status!: UUID;
     estado!: string;
     fecha!: Date;
     numIntentos!: number;
@@ -24,11 +24,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
     matrizDiferencias!: JSON;
     id_acomodador!: UUID;
     id_planograma!: UUID;
-    id_manager!: UUID;
   }
   Status.init(
     {
-      id_Status: {
+      id_status: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,

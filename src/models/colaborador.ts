@@ -2,31 +2,25 @@
 
 import { Model } from "sequelize";
 import { UUID } from "crypto";
+import {Roles} from "./manager";
 
 interface ColaboradorAttributes {
-  id_Colaborador: UUID;
+  id_colaborador: UUID;
   nombre: string;
-  apellidoP: string;
-  apellidoM: string;
+  apellido: string;
   correo: string;
   awsCognitoId: string;
   role: string;
   id_manager: UUID;
 }
 
-export enum Roles {
-  ADMIN = "ADMIN",
-  MANAGER = "MANAGER",
-  COLABORADOR = "COLABORADOR",
-  ACOMODADOR = "ACOMODADOR",
-}
+
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Colaborador extends Model<ColaboradorAttributes> implements ColaboradorAttributes {
-    id_Colaborador!: UUID;
+    id_colaborador!: UUID;
     nombre!: string;
-    apellidoP!: string;
-    apellidoM!: string;
+    apellido!: string;
     correo!: string;
     awsCognitoId!: string;
     role!: string;
@@ -34,7 +28,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
   Colaborador.init(
     {
-     id_Colaborador: {
+     id_colaborador: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
@@ -45,11 +39,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      apellidoP: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      apellidoM: {
+      apellido: {
         type: DataTypes.STRING,
         allowNull: false,
       },

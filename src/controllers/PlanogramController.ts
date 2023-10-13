@@ -499,7 +499,7 @@ class PlanogramController extends AbstractController {
 
       res
         .status(201)
-        .send({ planograms: planogram, message: "ok" });
+        .send({ message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }

@@ -2,37 +2,30 @@
 
 import { Model } from "sequelize";
 import { UUID } from "crypto";
+import {Roles} from "./manager";
 
 interface AdminAttributes {
-  id_Admin: UUID;
+  id_admin: UUID;
   nombre: string;
-  apellidoP: string;
-  apellidoM: string;
+  apellido: string;
   correo: string;
   awsCognitoId: string;
   role: string;
 }
 
-export enum Roles {
-  ADMIN = "ADMIN",
-  MANAGER = "MANAGER",
-  COLABORADOR = "COLABORADOR",
-  ACOMODADOR = "ACOMODADOR",
-}
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Admin extends Model<AdminAttributes> implements AdminAttributes {
-    id_Admin!: UUID;
+    id_admin!: UUID;
     nombre!: string;
-    apellidoP!: string;
-    apellidoM!: string;
+    apellido!: string;
     correo!: string;
     awsCognitoId!: string;
     role!: string;
   }
   Admin.init(
     {
-     id_Admin: {
+     id_admin: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
@@ -43,11 +36,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      apellidoP: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      apellidoM: {
+      apellido: {
         type: DataTypes.STRING,
         allowNull: false,
       },

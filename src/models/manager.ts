@@ -4,10 +4,9 @@ import { Model } from "sequelize";
 import { UUID } from "crypto";
 
 interface ManagerAttributes {
-  id_Manager: UUID;
+  id_manager: UUID;
   nombre: string;
-  apellidoP: string;
-  apellidoM: string;
+  apellido: string;
   correo: string;
   awsCognitoId: string;
   role: string;
@@ -23,10 +22,9 @@ export enum Roles {
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Manager extends Model<ManagerAttributes> implements ManagerAttributes {
-    id_Manager!: UUID;
+    id_manager!: UUID;
     nombre!: string;
-    apellidoP!: string;
-    apellidoM!: string;
+    apellido!: string;
     correo!: string;
     awsCognitoId!: string;
     role!: string;
@@ -34,7 +32,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
   Manager.init(
     {
-     id_Manager: {
+     id_manager: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
@@ -45,11 +43,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      apellidoP: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      apellidoM: {
+      apellido: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -71,7 +65,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       role: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: Roles.ADMIN,
+        defaultValue: Roles.MANAGER,
       },
     },
     {

@@ -4,10 +4,9 @@ import { Model } from "sequelize";
 import { UUID } from "crypto";
 
 interface AcomodadorAttributes {
-  id_Acomodador: UUID;
+  id_acomodador: UUID;
   nombre: string;
-  apellidoP: string;
-  apellidoM: string;
+  apellido: string;
   correo: string;
   awsCognitoId: string;
   role: string;
@@ -23,10 +22,9 @@ export enum Roles {
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Acomodador extends Model<AcomodadorAttributes> implements AcomodadorAttributes {
-    id_Acomodador!: UUID;
+    id_acomodador!: UUID;
     nombre!: string;
-    apellidoP!: string;
-    apellidoM!: string;
+    apellido!: string;
     correo!: string;
     awsCognitoId!: string;
     role!: string;
@@ -34,7 +32,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
   Acomodador.init(
     {
-     id_Acomodador: {
+     id_acomodador: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
@@ -45,11 +43,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      apellidoP: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      apellidoM: {
+      apellido: {
         type: DataTypes.STRING,
         allowNull: false,
       },
