@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
+
 import bd from "../models";
 
 const dummy_coordenadas = {
@@ -468,6 +469,7 @@ class PlanogramController extends AbstractController {
       const planogram = await bd.Planogram.create({
         url_imagen: url_imagen,
         coordenadas: dummy_coordenadas,
+        id_manager: managerID,
       });
 
       if (!planogram) {
@@ -497,7 +499,7 @@ class PlanogramController extends AbstractController {
 
       res
         .status(201)
-        .send({ coordinates: planogram.coordenadas, message: "ok" });
+        .send({ planograms: planogram, message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }

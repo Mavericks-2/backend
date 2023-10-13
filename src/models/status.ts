@@ -32,10 +32,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
       },
       estado: {
-        type: DataTypes.number,
+        type: DataTypes.MEDIUMINT,
         allowNull: false,
       },
       fecha: {
@@ -44,11 +45,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: DataTypes.NOW,
       },
       numIntentos: {
-        type: DataTypes.number,
+        type: DataTypes.MEDIUMINT,
         allowNull: false,
       },
       numProdFallidos: {
-        type: DataTypes.number,
+        type: DataTypes.MEDIUMINT,
         allowNull: false,
       },
       matrizDiferencias: {
