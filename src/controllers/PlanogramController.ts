@@ -465,10 +465,12 @@ class PlanogramController extends AbstractController {
 
   private async postPlanogramConfig(req: Request, res: Response) {
     const { url_imagen, managerID, coordenadas } = req.body;
+
+    console.log(url_imagen, managerID, coordenadas)
     try {
       const planogram = await bd.Planogram.create({
         url_imagen: url_imagen,
-        coordenadas: dummy_coordenadas,
+        coordenadas: coordenadas, // TODO: Cambiar por coordenadas
         id_manager: managerID,
       });
 
@@ -478,28 +480,43 @@ class PlanogramController extends AbstractController {
 
       res
         .status(201)
-        .send({ coordinates: planogram.coordenadas, message: "ok" });
+        .send({ message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
   }
 
   private async getPlanogramConfig(req: Request, res: Response) {
-    const { managerID } = req.body;
+    const { id_acomodador } = req.body;
+
+    console.log(id_acomodador);
     try {
-      const planogram = await bd.Planogram.findOne({
+      const acomodador = await bd.Acomodador.findOne({
         where: {
-          id_manager: managerID,
+          id_acomodador: id_acomodador,
         },
       });
 
+      if (!acomodador) {
+        throw new Error("Error retrieving acomodador");
+      }
+
+      const planogram = await bd.Planogram.findOne({
+        where: {
+          id_manager: acomodador.id_manager,
+        }, 
+        order: [
+          ['createdAt', 'DESC']
+        ]
+      });
+
       if (!planogram) {
-        throw new Error("Error creating planogram");
+        throw new Error("Error retrieving planogram");
       }
 
       res
         .status(201)
-        .send({ message: "ok" });
+        .send({ planograms: planogram, message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }

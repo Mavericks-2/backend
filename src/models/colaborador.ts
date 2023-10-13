@@ -2,7 +2,7 @@
 
 import { Model } from "sequelize";
 import { UUID } from "crypto";
-import {Roles} from "./manager";
+// import {Roles} from "./admin";
 
 interface ColaboradorAttributes {
   id_colaborador: UUID;
@@ -14,7 +14,12 @@ interface ColaboradorAttributes {
   id_manager: UUID;
 }
 
-
+export enum Roles {
+  ADMIN = "ADMIN",
+  MANAGER = "MANAGER",
+  COLABORADOR = "COLABORADOR",
+  ACOMODADOR = "ACOMODADOR",
+}
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Colaborador extends Model<ColaboradorAttributes> implements ColaboradorAttributes {

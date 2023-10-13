@@ -2,7 +2,7 @@
 
 import { Model } from "sequelize";
 import { UUID } from "crypto";
-
+// import {Roles} from "./admin";
 interface ManagerAttributes {
   id_manager: UUID;
   nombre: string;
