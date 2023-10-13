@@ -464,14 +464,14 @@ class PlanogramController extends AbstractController {
   }
 
   private async postPlanogramConfig(req: Request, res: Response) {
-    const { url_imagen, managerID, coordenadas } = req.body;
+    const { url_imagen, id_manager, coordenadas, matriz_posiciones } = req.body;
 
-    console.log(url_imagen, managerID, coordenadas)
     try {
       const planogram = await bd.Planogram.create({
         url_imagen: url_imagen,
-        coordenadas: coordenadas, // TODO: Cambiar por coordenadas
-        id_manager: managerID,
+        coordenadas: coordenadas,
+        id_manager: id_manager,
+        matriz_posiciones: matriz_posiciones,
       });
 
       if (!planogram) {
@@ -489,7 +489,6 @@ class PlanogramController extends AbstractController {
   private async getPlanogramConfig(req: Request, res: Response) {
     const { id_acomodador } = req.body;
 
-    console.log(id_acomodador);
     try {
       const acomodador = await bd.Acomodador.findOne({
         where: {
@@ -516,7 +515,7 @@ class PlanogramController extends AbstractController {
 
       res
         .status(201)
-        .send({ planograms: planogram, message: "ok" });
+        .send({ planogram: planogram, message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }

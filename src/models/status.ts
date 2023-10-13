@@ -24,6 +24,18 @@ module.exports = (sequelize: any, DataTypes: any) => {
     matrizDiferencias!: JSON;
     id_acomodador!: UUID;
     id_planograma!: UUID;
+    static associate(models:any) {
+      // define association here
+      Status.belongsTo(models.Planogram, {
+        foreignKey: "id_planograma",
+        as: "statusPlanogram",
+      });
+
+      Status.belongsTo(models.Acomodador, {
+        foreignKey: "id_acomodador",
+        as: "statusAcomodador",
+      });
+    }
   }
   Status.init(
     {
@@ -31,7 +43,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
       },
       estado: {
@@ -58,12 +69,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       id_acomodador: {
         type: DataTypes.UUID,
         allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
       },
       id_planograma: {
         type: DataTypes.UUID,
         allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
       },
     },
     {

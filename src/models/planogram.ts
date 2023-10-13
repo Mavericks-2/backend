@@ -4,11 +4,12 @@ import { UUID } from "crypto";
 import { Model } from "sequelize";
 
 interface Planogramttributes {
-  id_Planogram: UUID;
+  id_planogram: UUID;
   url_imagen: string;
   fecha_creacion: Date;
   coordenadas: JSON;
   id_manager: UUID;
+  matriz_posiciones: JSON;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -16,19 +17,26 @@ module.exports = (sequelize: any, DataTypes: any) => {
     extends Model<Planogramttributes>
     implements Planogramttributes
   {
-    id_Planogram!: UUID;
+    id_planogram!: UUID;
     url_imagen!: string;
     fecha_creacion!: Date;
     coordenadas!: JSON;
     id_manager!: UUID;
+    matriz_posiciones!: JSON;
+    static associate(models:any) {
+      // define association here
+      Planogram.belongsTo(models.Manager, {
+        foreignKey: "id_manager",
+        as: "planogramManager",
+      });
+    }
   }
   Planogram.init(
     {
-      id_Planogram: {
+      id_planogram: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
       },
       url_imagen: {
@@ -47,7 +55,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       id_manager: {
         type: DataTypes.UUID,
         allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
+      },
+      matriz_posiciones: {
+        type: DataTypes.JSON,
+        allowNull: false,
       },
     }, 
     {

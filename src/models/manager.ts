@@ -29,6 +29,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
     awsCognitoId!: string;
     role!: string;
     id_admin!: UUID;
+    static associate(models:any) {
+      // define association here
+      Manager.belongsTo(models.Admin, {
+        foreignKey: "id_admin",
+        as: "managerAdmin",
+      });
+    }
   }
   Manager.init(
     {
@@ -36,7 +43,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
       },
       nombre: {
@@ -60,7 +66,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       id_admin: {
         type: DataTypes.UUID,
         allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
       },
       role: {
         type: DataTypes.STRING,
