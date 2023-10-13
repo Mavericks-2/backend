@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
+
 import bd from "../models";
 
 const dummy_coordenadas = {
@@ -463,11 +464,14 @@ class PlanogramController extends AbstractController {
   }
 
   private async postPlanogramConfig(req: Request, res: Response) {
-    const { url_imagen, managerID, coordenadas } = req.body;
+    const { url_imagen, id_manager, coordenadas, matriz_posiciones } = req.body;
+
     try {
       const planogram = await bd.Planogram.create({
         url_imagen: url_imagen,
-        coordenadas: dummy_coordenadas,
+        coordenadas: coordenadas,
+        id_manager: id_manager,
+        matriz_posiciones: matriz_posiciones,
       });
 
       if (!planogram) {
@@ -476,28 +480,42 @@ class PlanogramController extends AbstractController {
 
       res
         .status(201)
-        .send({ coordinates: planogram.coordenadas, message: "ok" });
+        .send({ message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
   }
 
   private async getPlanogramConfig(req: Request, res: Response) {
-    const { managerID } = req.body;
+    const { id_acomodador } = req.body;
+
     try {
-      const planogram = await bd.Planogram.findOne({
+      const acomodador = await bd.Acomodador.findOne({
         where: {
-          id_manager: managerID,
+          id_acomodador: id_acomodador,
         },
       });
 
+      if (!acomodador) {
+        throw new Error("Error retrieving acomodador");
+      }
+
+      const planogram = await bd.Planogram.findOne({
+        where: {
+          id_manager: acomodador.id_manager,
+        }, 
+        order: [
+          ['createdAt', 'DESC']
+        ]
+      });
+
       if (!planogram) {
-        throw new Error("Error creating planogram");
+        throw new Error("Error retrieving planogram");
       }
 
       res
         .status(201)
-        .send({ coordinates: planogram.coordenadas, message: "ok" });
+        .send({ planogram: planogram, message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
