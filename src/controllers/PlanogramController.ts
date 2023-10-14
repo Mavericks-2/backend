@@ -471,7 +471,7 @@ class PlanogramController extends AbstractController {
         url_imagen: url_imagen,
         coordenadas: coordenadas,
         id_manager: id_manager,
-        matriz_posiciones: matriz_productos,
+        matriz_productos: matriz_productos,
         lineas: lineas,
       });
 
