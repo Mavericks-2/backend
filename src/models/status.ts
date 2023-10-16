@@ -7,8 +7,6 @@ interface StatusAttributes {
   id_status: UUID;
   estado: string;
   fecha: Date;
-  numIntentos: number;
-  numProdFallidos: number;
   matrizDiferencias: JSON;
   id_acomodador: UUID;
   id_planogram: UUID;
@@ -19,8 +17,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id_status!: UUID;
     estado!: string;
     fecha!: Date;
-    numIntentos!: number;
-    numProdFallidos!: number;
     matrizDiferencias!: JSON;
     id_acomodador!: UUID;
     id_planogram!: UUID;
@@ -53,14 +49,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
-      },
-      numIntentos: {
-        type: DataTypes.MEDIUMINT,
-        allowNull: false,
-      },
-      numProdFallidos: {
-        type: DataTypes.MEDIUMINT,
-        allowNull: false,
       },
       matrizDiferencias: {
         type: DataTypes.JSON,

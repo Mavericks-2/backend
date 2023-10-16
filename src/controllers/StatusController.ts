@@ -22,14 +22,12 @@ class StatusController extends AbstractController {
         this.router.post("/postComparedPhotos", this.postComparedPhotos.bind(this));
       }
       private async postComparedPhotos(req: Request, res: Response) {
-        const { estado, numIntentos,numProdFallidos, matrizDiferencias, id_acomodador, id_planogram } =
+        const { estado, matrizDiferencias, id_acomodador, id_planogram } =
           req.body;
     
         try {
           const status = await bd.Status.create({
             estado: estado,
-            numIntentos: numIntentos,
-            numProdFallidos: numProdFallidos,
             matrizDiferencias: matrizDiferencias,
             id_acomodador: id_acomodador,
             id_planogram: id_planogram,
