@@ -9,7 +9,7 @@ interface Planogramttributes {
   fecha_creacion: Date;
   coordenadas: JSON;
   id_manager: UUID;
-  matriz_posiciones: JSON;
+  matriz_productos: JSON;
   lineas: JSON;
 }
 
@@ -23,7 +23,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     fecha_creacion!: Date;
     coordenadas!: JSON;
     id_manager!: UUID;
-    matriz_posiciones!: JSON;
+    matriz_productos!: JSON;
     lineas!: JSON;
     static associate(models:any) {
       // define association here
@@ -58,7 +58,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      matriz_posiciones: {
+      matriz_productos: {
         type: DataTypes.JSON,
         allowNull: false,
       },

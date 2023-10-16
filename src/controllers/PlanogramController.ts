@@ -465,7 +465,7 @@ class PlanogramController extends AbstractController {
   }
 
   private async postPlanogramConfig(req: Request, res: Response) {
-    const { name_image, id_manager, coordenadas, matriz_posiciones, lineas } =
+    const { name_image, id_manager, coordenadas, matriz_productos, lineas } =
       req.body;
     const base_url =
       "https://ax0zsz0jrhwy.objectstorage.us-phoenix-1.oci.customer-oci.com/p/TYid6Nup69TsNepEfW546eE4zJEmpx-85BUx86RIYKWXufft-LvYrjSu4m-KnI5k/n/ax0zsz0jrhwy/b/Images/o/";
@@ -475,7 +475,7 @@ class PlanogramController extends AbstractController {
         url_imagen: url,
         coordenadas: coordenadas,
         id_manager: id_manager,
-        matriz_posiciones: matriz_posiciones,
+        matriz_productos: matriz_productos,
         lineas: lineas,
       });
 
