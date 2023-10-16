@@ -7,11 +7,9 @@ interface StatusAttributes {
   id_status: UUID;
   estado: string;
   fecha: Date;
-  numIntentos: number;
-  numProdFallidos: number;
   matrizDiferencias: JSON;
   id_acomodador: UUID;
-  id_planograma: UUID;
+  id_planogram: UUID;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -19,15 +17,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id_status!: UUID;
     estado!: string;
     fecha!: Date;
-    numIntentos!: number;
-    numProdFallidos!: number;
     matrizDiferencias!: JSON;
     id_acomodador!: UUID;
-    id_planograma!: UUID;
+    id_planogram!: UUID;
     static associate(models:any) {
       // define association here
       Status.belongsTo(models.Planogram, {
-        foreignKey: "id_planograma",
+        foreignKey: "id_planogram",
         as: "statusPlanogram",
       });
 
@@ -46,21 +42,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
         primaryKey: true,
       },
       estado: {
-        type: DataTypes.MEDIUMINT,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       fecha: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
-      },
-      numIntentos: {
-        type: DataTypes.MEDIUMINT,
-        allowNull: false,
-      },
-      numProdFallidos: {
-        type: DataTypes.MEDIUMINT,
-        allowNull: false,
       },
       matrizDiferencias: {
         type: DataTypes.JSON,
@@ -70,7 +58,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      id_planograma: {
+      id_planogram: {
         type: DataTypes.UUID,
         allowNull: false,
       },
