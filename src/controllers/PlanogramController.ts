@@ -461,17 +461,21 @@ class PlanogramController extends AbstractController {
       this.postPlanogramConfig.bind(this)
     );
     this.router.get("/getPlanogramConfig", this.getPlanogramConfig.bind(this));
+    // this.router.post("/postComparedPhotos", this.postComparedPhotos.bind(this));
   }
 
   private async postPlanogramConfig(req: Request, res: Response) {
-    const { url_imagen, id_manager, coordenadas, matriz_productos, lineas } = req.body;
-
+    const { name_image, id_manager, coordenadas, matriz_posiciones, lineas } =
+      req.body;
+    const base_url =
+      "https://ax0zsz0jrhwy.objectstorage.us-phoenix-1.oci.customer-oci.com/p/TYid6Nup69TsNepEfW546eE4zJEmpx-85BUx86RIYKWXufft-LvYrjSu4m-KnI5k/n/ax0zsz0jrhwy/b/Images/o/";
+    const url = base_url + name_image;
     try {
       const planogram = await bd.Planogram.create({
-        url_imagen: url_imagen,
+        url_imagen: url,
         coordenadas: coordenadas,
         id_manager: id_manager,
-        matriz_productos: matriz_productos,
+        matriz_posiciones: matriz_posiciones,
         lineas: lineas,
       });
 
@@ -479,9 +483,7 @@ class PlanogramController extends AbstractController {
         throw new Error("Error creating planogram");
       }
 
-      res
-        .status(201)
-        .send({ message: "ok" });
+      res.status(201).send({ message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
@@ -504,19 +506,15 @@ class PlanogramController extends AbstractController {
       const planogram = await bd.Planogram.findOne({
         where: {
           id_manager: acomodador.id_manager,
-        }, 
-        order: [
-          ['createdAt', 'DESC']
-        ]
+        },
+        order: [["createdAt", "DESC"]],
       });
 
       if (!planogram) {
         throw new Error("Error retrieving planogram");
       }
 
-      res
-        .status(201)
-        .send({ planogram: planogram, message: "ok" });
+      res.status(201).send({ planogram: planogram, message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
