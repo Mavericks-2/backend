@@ -24,7 +24,7 @@ class PlanogramController extends AbstractController {
       "/postPlanogramConfig",
       this.postPlanogramConfig.bind(this)
     );
-    this.router.get("/getPlanogramConfig", this.getPlanogramConfig.bind(this));
+    this.router.get("/getPlanogramConfig/:id_acomodador", this.getPlanogramConfig.bind(this));
   }
 
   private async postPlanogramConfig(req: Request, res: Response) {
@@ -52,7 +52,8 @@ class PlanogramController extends AbstractController {
   }
 
   private async getPlanogramConfig(req: Request, res: Response) {
-    const { id_acomodador } = req.body;
+    
+    const { id_acomodador } = req.params;
 
     try {
       const acomodador = await bd.Acomodador.findOne({
