@@ -32,6 +32,8 @@ class Server {
     controllers.forEach((controller: AbstractController) => {
       this.app.use(`/${controller.prefix}`, controller.router);
     });
+
+    this.app.use(express.raw({ type: 'image/jpeg', limit: '10mb' })); // Adjust the limit according to your needs
   }
 
   public async init() {
