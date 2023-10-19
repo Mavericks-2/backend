@@ -46,7 +46,7 @@ class PlanogramController extends AbstractController {
 
       let options = {
         method: "PUT",
-        headers: { "Content-Type": `image/${type}` },
+        headers: { "Content-Type": `${type}` },
         body: imageBuffer,
       };
 
