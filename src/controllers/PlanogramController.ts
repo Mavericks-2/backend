@@ -56,22 +56,18 @@ class PlanogramController extends AbstractController {
         throw new Error("Image not found");
       }
 
-      console.log(response);
-
-      res.status(201).send({ message: "ok", "url": url });
+      res.status(201).send({ message: "ok", "url": response.url });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
   }
 
   private async postPlanogramConfig(req: Request, res: Response) {
-    const { name_image, id_manager, coordenadas, matriz_productos, lineas } =
+    const { url_imagen, id_manager, coordenadas, matriz_productos, lineas } =
       req.body;
-    const base_url = IMAGE_BASE_URL;
-    const url = base_url + name_image;
     try {
       const planogram = await bd.Planogram.create({
-        url_imagen: url,
+        url_imagen: url_imagen,
         coordenadas: coordenadas,
         id_manager: id_manager,
         matriz_productos: matriz_productos,
