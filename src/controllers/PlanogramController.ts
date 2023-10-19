@@ -42,7 +42,7 @@ class PlanogramController extends AbstractController {
 
       const random_name = Math.random().toString(36).substring(7);
 
-      const url = IMAGE_BASE_URL + random_name + type;
+      const url = IMAGE_BASE_URL + random_name + "."+ type.split("/")[1];
 
       let options = {
         method: "PUT",
