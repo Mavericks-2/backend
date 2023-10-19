@@ -36,15 +36,17 @@ class PlanogramController extends AbstractController {
 
   private async postPlanogramToCloud(req: Request, res: Response) {
     try {
-      const { base_64_image } = req.body;
+      const { base_64_image, type } = req.body;
 
       const imageBuffer = Buffer.from(base_64_image, "base64");
 
-      const url = IMAGE_BASE_URL + "test.jpeg";
+      const random_name = Math.random().toString(36).substring(7);
+
+      const url = IMAGE_BASE_URL + random_name + type;
 
       let options = {
         method: "PUT",
-        headers: { "Content-Type": "image/jpeg" },
+        headers: { "Content-Type": `image/${type}` },
         body: imageBuffer,
       };
 
@@ -56,7 +58,7 @@ class PlanogramController extends AbstractController {
 
       console.log(response);
 
-      res.status(201).send({ message: "ok" });
+      res.status(201).send({ message: "ok", "url": url });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
