@@ -6,7 +6,7 @@ import PlanogramController from "./controllers/PlanogramController";
 import StatusController from "./controllers/StatusController";
 const servidor = new Server({
   port: 8080,
-  middlewares: [express.json(), express.urlencoded({ extended: true }), cors()],
+  middlewares: [express.json({limit: '50mb'}), express.urlencoded({ extended: true, limit: '50mb'}), cors()],
   controllers: [AuthenticationController.getInstance(), PlanogramController.getInstance(), StatusController.getInstance()],
   env: "development",
 });
