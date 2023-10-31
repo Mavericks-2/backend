@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
+import bd from "../models";
 
 class AuthenticationController extends AbstractController {
   protected validateBody(type: any) {
@@ -21,6 +22,10 @@ class AuthenticationController extends AbstractController {
     this.router.post("/verify", this.verify.bind(this));
     this.router.post("/signin", this.signin.bind(this));
     this.router.post("/getUser", this.getUser.bind(this));
+    this.router.post("/signupAcomodador", this.signupAcomodador.bind(this));
+    this.router.post("/verifyAcomodador", this.verifyAcomodador.bind(this));
+    this.router.post("/signinAcomodador", this.signinAcomodador.bind(this));
+    this.router.post("/getUserAcomodador", this.getUserAcomodador.bind(this));
     this.router.post("/forgotPassword", this.forgotPassword.bind(this));
     this.router.post("/confirmForgotPassword", this.changePassword.bind(this));
   }
@@ -29,7 +34,14 @@ class AuthenticationController extends AbstractController {
     try {
       const { email } = req.body;
 
-      res.status(200).send({ message: "okay" });
+      const user = await bd.Manager.findOne({
+        where: {
+          correo: email,
+        },
+      });
+
+
+      res.status(200).send({ message: "okay", user: user });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
@@ -58,13 +70,101 @@ class AuthenticationController extends AbstractController {
     const { email, password, name, lastName } = req.body;
     try {
       // Crear el usuario de cognito
-      const user = await this.cognitoService.signUpUser(email, password, [
+      const userSignUp = await this.cognitoService.signUpUser(email, password, [
         {
           Name: "email",
           Value: email,
         },
       ]);
-      
+
+      if (!userSignUp) {
+        throw new Error("Error creating user in Cognito");
+      }
+
+      const user = await bd.Manager.create({
+        nombre: name,
+        apellido: lastName,
+        correo: email,
+        awsCognitoId: userSignUp.UserSub,
+        id_admin: "550e8400-e29b-41d4-a716-446655440000",
+        role: "MANAGER",
+      });
+
+      if (!user) {
+        throw new Error("Error creating user");
+      }
+
+      res.status(201).send({ message: "ok" });
+    } catch (error: any) {
+      res.status(500).send({ code: error.code, message: error.message });
+    }
+  }
+
+  private async getUserAcomodador(req: Request, res: Response) {
+    try {
+      const { email } = req.body;
+
+      const user = await bd.Acomodador.findOne({
+        where: {
+          correo: email,
+        },
+      });
+
+
+      res.status(200).send({ message: "okay", user: user });
+    } catch (error: any) {
+      res.status(500).send({ code: error.code, message: error.message });
+    }
+  }
+
+  private async signinAcomodador(req: Request, res: Response) {
+    const { email, password } = req.body;
+    try {
+      const login = await this.cognitoService.signInUser(email, password);
+      res.status(200).send({ ...login.AuthenticationResult });
+    } catch (error: any) {
+      res.status(500).send({ code: error.code, message: error.message });
+    }
+  }
+
+  private async verifyAcomodador(req: Request, res: Response) {
+    const { email, verifyCode } = req.body;
+    try {
+      await this.cognitoService.verifyUser(email, verifyCode);
+      res.status(200).send({ message: "ok" });
+    } catch (error: any) {
+      res.status(500).send({ code: error.code, message: error.message });
+    }
+  }
+
+  private async signupAcomodador(req: Request, res: Response) {
+    const { email, password, name, lastName } = req.body;
+    try {
+      // Crear el usuario de cognito
+      const userSignUp = await this.cognitoService.signUpUser(email, password, [
+        {
+          Name: "email",
+          Value: email,
+        },
+      ]);
+
+      if (!userSignUp) {
+        throw new Error("Error creating user in Cognito");
+      }
+
+      const user = await bd.Acomodador.create({
+        nombre: name,
+        apellido: lastName,
+        correo: email,
+        awsCognitoId: userSignUp.UserSub,
+        id_admin: "440e8400-e29b-41d4-a716-446655440000",
+        role: "ACOMODADOR",
+      });
+
+      if (!user) {
+        throw new Error("Error creating user");
+      }
+
       res.status(201).send({ message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });

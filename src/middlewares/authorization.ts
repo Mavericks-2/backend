@@ -20,7 +20,7 @@ class AuthMiddleware {
   }
 
   private constructor() {
-    // this.getAWSCognitoPems();
+    this.getAWSCognitoPems();
   }
 
   public verifyToken(req: Request, res: Response, next: NextFunction) {
