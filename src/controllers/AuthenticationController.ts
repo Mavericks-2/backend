@@ -152,12 +152,14 @@ class AuthenticationController extends AbstractController {
         throw new Error("Error creating user in Cognito");
       }
 
+      const manager = await bd.Manager.findOne();
+
       const user = await bd.Acomodador.create({
         nombre: name,
         apellido: lastName,
         correo: email,
         awsCognitoId: userSignUp.UserSub,
-        id_admin: "440e8400-e29b-41d4-a716-446655440000",
+        id_manager: manager.id_manager,
         role: "ACOMODADOR",
       });
 
