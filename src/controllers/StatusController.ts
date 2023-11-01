@@ -91,6 +91,7 @@ class StatusController extends AbstractController {
         attributes: [
           [bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha")), "fecha"],
           [bd.Sequelize.fn("GROUP_CONCAT", bd.Sequelize.col("matrizDiferencias")), "matricesDiferencias"],
+          [bd.Sequelize.fn("GROUP_CONCAT", bd.Sequelize.col("matrizProductosF")), "matricesProductosF"]
         ],
         group: [bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha"))], // Agrupa por fecha
         order: [[bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha")), "ASC"]],
