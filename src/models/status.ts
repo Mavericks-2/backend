@@ -8,6 +8,7 @@ interface StatusAttributes {
   estado: string;
   fecha: Date;
   matrizDiferencias: JSON;
+  matrizProductosF: JSON;
   id_acomodador: UUID;
   id_planogram: UUID;
 }
@@ -18,6 +19,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     estado!: string;
     fecha!: Date;
     matrizDiferencias!: JSON;
+    matrizProductosF!: JSON;
     id_acomodador!: UUID;
     id_planogram!: UUID;
     static associate(models:any) {
@@ -51,6 +53,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: DataTypes.NOW,
       },
       matrizDiferencias: {
+        type: DataTypes.JSON,
+        allowNull: false,
+      },
+      matrizProductosF: {
         type: DataTypes.JSON,
         allowNull: false,
       },
