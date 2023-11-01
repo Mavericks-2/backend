@@ -21,15 +21,23 @@ class StatusController extends AbstractController {
 
   protected initRoutes(): void {
     this.router.post("/postComparedPhotos", this.postComparedPhotos.bind(this));
-    this.router.get("/getIntentosPrevAcomodo", this.getIntentosPrevAcomodo.bind(this));
+    this.router.get(
+      "/getIntentosPrevAcomodo",
+      this.getIntentosPrevAcomodo.bind(this)
+    );
+    this.router.get(
+      "/getMatrizDiferencias",
+      this.getMatrizDiferencias.bind(this)
+    );
   }
   private async postComparedPhotos(req: Request, res: Response) {
-    const { estado, matrizDiferencias, id_acomodador, id_planogram } = req.body;
+    const { estado, matrizDiferencias, matrizProductosF, id_acomodador, id_planogram } = req.body;
 
     try {
       const status = await bd.Status.create({
         estado: estado,
         matrizDiferencias: matrizDiferencias,
+        matrizProductosF: matrizProductosF,
         id_acomodador: id_acomodador,
         id_planogram: id_planogram,
       });
@@ -61,6 +69,7 @@ class StatusController extends AbstractController {
           "id_planogram",
           [bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha"))],
         ],
+        order: [[bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha")), "DESC"]],
         include: [
           {
             model: bd.Acomodador,
@@ -71,6 +80,23 @@ class StatusController extends AbstractController {
       });
 
       res.json(status);
+    } catch (error) {
+      console.error("Error en la consulta: " + error);
+      res.status(500).send("Error en la consulta.");
+    }
+  }
+  private async getMatrizDiferencias(req: Request, res: Response) {
+    try {
+      const status = await bd.Status.findAll({
+        attributes: [
+          [bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha")), "fecha"],
+          [bd.Sequelize.fn("GROUP_CONCAT", bd.Sequelize.col("matrizDiferencias")), "matricesDiferencias"],
+        ],
+        group: [bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha"))], // Agrupa por fecha
+        order: [[bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha")), "ASC"]],
+      });      
+      res.json(status);
+      
     } catch (error) {
       console.error("Error en la consulta: " + error);
       res.status(500).send("Error en la consulta.");
