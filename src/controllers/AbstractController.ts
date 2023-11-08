@@ -35,4 +35,20 @@ export default abstract class AbstractController {
 
   // Validar el body de la petición
   protected abstract validateBody(type: any): any;
+
+  protected convertLongTextToJSON(element: any) {
+    const newElement : any = {...element}; 
+    Object.keys(newElement).forEach((key) => {
+      console.log("KEY", key);
+      if (typeof newElement[key] === "string") {
+        console.log("STRING", newElement[key]);
+        if (newElement[key].startsWith("{") || newElement[key].startsWith("[")) {
+          console.log("JSON", newElement[key]);
+          newElement[key] = JSON.parse(newElement[key].replace(/'/g, '"'));
+        }
+      }
+    });
+    
+    return newElement;
+  }
 }
