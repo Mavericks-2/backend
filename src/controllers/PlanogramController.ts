@@ -108,8 +108,9 @@ class PlanogramController extends AbstractController {
       if (!planogram) {
         throw new Error("Error retrieving planogram");
       }
+      const newPlanogram = this.convertLongTextToJSON(planogram.dataValues);
 
-      res.status(201).send({ planogram: planogram, message: "ok" });
+      res.status(201).send({ planogram: newPlanogram, message: "ok" });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
