@@ -4,10 +4,11 @@ import Server from "./providers/Server";
 import AuthenticationController from "./controllers/AuthenticationController";
 import PlanogramController from "./controllers/PlanogramController";
 import StatusController from "./controllers/StatusController";
+import ModelController from "./controllers/ModelController";
 const servidor = new Server({
   port: 8080,
   middlewares: [express.json({limit: '50mb'}), express.urlencoded({ extended: true, limit: '50mb'}), cors()],
-  controllers: [AuthenticationController.getInstance(), PlanogramController.getInstance(), StatusController.getInstance()],
+  controllers: [AuthenticationController.getInstance(), PlanogramController.getInstance(), StatusController.getInstance(), ModelController.getInstance()],
   env: "development",
 });
 
