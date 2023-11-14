@@ -7,10 +7,7 @@ export default {
     database: DB_DATABASE,
     host: DB_HOST,
     dialect: "mysql",
-    dialectOptions: {
-      useUTC: false,
-    },
-    timezone: '-06:00',
+
   },
   test: {
     username: "root",
@@ -18,10 +15,7 @@ export default {
     database: "database_test",
     host: "127.0.0.1",
     dialect: "mysql",
-    dialectOptions: {
-      useUTC: false,
-    },
-    timezone: '-06:00',
+
   },
   production: {
     username: "root",
@@ -29,9 +23,6 @@ export default {
     database: "database_production",
     host: "127.0.0.1",
     dialect: "mysql",
-    dialectOptions: {
-      useUTC: false,
-    },
-    timezone: '-06:00',
+
   },
 };

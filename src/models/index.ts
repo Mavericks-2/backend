@@ -22,7 +22,7 @@ if (env === "development") {
         timestamps: false,
         freezeTableName: true,
       },
-      timezone:"-06:00",
+      
     }
   );
 } else if (env === "test") {
@@ -37,7 +37,7 @@ if (env === "development") {
         timestamps: false,
         freezeTableName: true,
       },
-      timezone:"-06:00",
+      
     }
   );
 } else if (env === "production") {
@@ -52,7 +52,7 @@ if (env === "development") {
         timestamps: false,
         freezeTableName: true,
       },
-      timezone:"-06:00",
+      
     }
   );
 }
