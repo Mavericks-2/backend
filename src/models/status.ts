@@ -50,7 +50,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       fecha: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
       },
       matrizDiferencias: {
         type: DataTypes.JSON,

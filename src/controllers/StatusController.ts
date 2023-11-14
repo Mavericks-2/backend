@@ -50,6 +50,7 @@ class StatusController extends AbstractController {
         matrizProductosF: matrizProductosF,
         id_acomodador: id_acomodador,
         id_planogram: id_planogram,
+        fecha: new Date(new Date().getTime() - 21600000),
       });
 
       if (!status) {
@@ -79,7 +80,7 @@ class StatusController extends AbstractController {
           "id_planogram",
           [bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha"))],
         ],
-        order: [[bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha")), "DESC"]],
+        order: [[bd.Sequelize.fn("DATE", bd.Sequelize.col("fecha")), "ASC"]],
         include: [
           {
             model: bd.Acomodador,
@@ -132,7 +133,7 @@ class StatusController extends AbstractController {
           [bd.Sequelize.fn("DATE_FORMAT", bd.Sequelize.col("fecha"), "%Y-%m-%d"), "fecha"],
         ],
         group: [bd.Sequelize.fn("DATE_FORMAT", bd.Sequelize.col("fecha"), "%Y-%m-%d")],
-        order: [["fecha", "DESC"]],
+        order: [["fecha", "ASC"]],
         raw: true,
       });
   
@@ -150,10 +151,9 @@ class StatusController extends AbstractController {
               [Op.between]: [fechaInicio, fechaFin],
             },
           },
-          order: [["fecha", "DESC"]],
+          order: [["fecha", "ASC"]],
         });
 
-                // Si el registro de "desacomodado" es nulo, asignamos el primer registro de "acomodado"
         if (primerDesacomodado === null) {
           primerDesacomodado = await bd.Status.findOne({
             attributes: ["fecha", "estado"],
@@ -163,7 +163,7 @@ class StatusController extends AbstractController {
                 [Op.between]: [fechaInicio, fechaFin],
               },
             },
-            order: [["fecha", "DESC"]],
+            order: [["fecha", "ASC"]],
           });
         }
   
@@ -175,7 +175,7 @@ class StatusController extends AbstractController {
               [Op.between]: [fechaInicio, fechaFin],
             },
           },
-          order: [["fecha", "DESC"]],
+          order: [["fecha", "ASC"]],
         });
         // Calculamos el timestamp
         let timestamp = primerAcomodado.fecha - primerDesacomodado.fecha;
