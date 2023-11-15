@@ -3,6 +3,7 @@ import AbstractController from "./AbstractController";
 
 import bd from "../models";
 import acomodador from "../models";
+import { Console } from "node:console";
 
 class StatusController extends AbstractController {
   protected validateBody(type: any) {
@@ -29,10 +30,7 @@ class StatusController extends AbstractController {
       "/getMatrizDiferencias",
       this.getMatrizDiferencias.bind(this)
     );
-    this.router.get(
-      "/getFechasStatus",
-      this.getFechasStatus.bind(this)
-    );
+    this.router.get("/getFechasStatus", this.getFechasStatus.bind(this));
   }
   private async postComparedPhotos(req: Request, res: Response) {
     const {
@@ -126,29 +124,54 @@ class StatusController extends AbstractController {
     }
   }
   private async getFechasStatus(req: Request, res: Response) {
-    const { Op } = require('sequelize');
+    const { Op } = require("sequelize");
     try {
       const fechasUnicas = await bd.Status.findAll({
         attributes: [
-          [bd.Sequelize.fn("DATE_FORMAT", bd.Sequelize.col("fecha"), "%Y-%m-%d"), "fecha"],
+          [
+            bd.Sequelize.fn(
+              "DATE_FORMAT",
+              bd.Sequelize.col("fecha"),
+              "%Y-%m-%d"
+            ),
+            "fecha",
+          ],
         ],
-        group: [bd.Sequelize.fn("DATE_FORMAT", bd.Sequelize.col("fecha"), "%Y-%m-%d")],
+        group: [
+          bd.Sequelize.fn("DATE_FORMAT", bd.Sequelize.col("fecha"), "%Y-%m-%d"),
+        ],
         order: [["fecha", "ASC"]],
         raw: true,
       });
-  
+
       const resultados = [];
-  
+
       for (const fecha of fechasUnicas) {
-        const fechaInicio = `${fecha.fecha} 00:00:00`;
-        const fechaFin = `${fecha.fecha} 23:59:59`;
-  
+        // Obtener la fecha anterior y posterior
+        const fechaActual = new Date(`${fecha.fecha}`);
+        fechaActual.setHours(fechaActual.getHours() + 23);
+        fechaActual.setMinutes(fechaActual.getMinutes() + 59);
+        fechaActual.setSeconds(fechaActual.getSeconds() + 59);
+
+
+        const fechaAnterior = new Date(fechaActual);
+        const fechaPosterior = new Date(fechaActual);
+        fechaAnterior.setDate(fechaAnterior.getDate() - 1);
+        fechaPosterior.setDate(fechaPosterior.getDate() + 1);
+        fechaPosterior.setHours(fechaPosterior.getHours() - 23);
+        fechaPosterior.setMinutes(fechaPosterior.getMinutes() - 59);
+        fechaPosterior.setSeconds(fechaPosterior.getSeconds() - 59);
+      
+
+        const inicioFecha = `${fechaAnterior.toISOString()}`;
+        const finFecha = `${fechaPosterior.toISOString()}`;
+
         let primerDesacomodado = await bd.Status.findOne({
           attributes: ["fecha", "estado"],
           where: {
             estado: "desacomodado",
             fecha: {
-              [Op.between]: [fechaInicio, fechaFin],
+              [Op.between]: [inicioFecha, finFecha],
             },
           },
           order: [["fecha", "ASC"]],
@@ -160,19 +183,19 @@ class StatusController extends AbstractController {
             where: {
               estado: "acomodado",
               fecha: {
-                [Op.between]: [fechaInicio, fechaFin],
+                [Op.between]: [inicioFecha, finFecha],
               },
             },
             order: [["fecha", "ASC"]],
           });
         }
-  
+
         const primerAcomodado = await bd.Status.findOne({
           attributes: ["fecha", "estado"],
           where: {
             estado: "acomodado",
             fecha: {
-              [Op.between]: [fechaInicio, fechaFin],
+              [Op.between]: [inicioFecha, finFecha],
             },
           },
           order: [["fecha", "ASC"]],
@@ -187,13 +210,12 @@ class StatusController extends AbstractController {
           timestamp,
         });
       }
-  
+
       res.json(resultados);
     } catch (error) {
       console.error("Error al obtener las fechas:", error);
       res.status(500).json({ error: "Error al obtener las fechas" });
     }
   }
-  
 }
 export default StatusController;
