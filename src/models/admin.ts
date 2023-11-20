@@ -1,3 +1,8 @@
+/* 
+@Description: Modelo de la tabla admin
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 "use strict";
 
 import { Model } from "sequelize";
@@ -29,7 +34,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
   Admin.init(
     {
-     id_admin: {
+      id_admin: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,

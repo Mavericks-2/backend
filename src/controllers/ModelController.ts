@@ -1,7 +1,14 @@
+/* 
+@Description: Controlador con rutas para la interacción 
+con el modelo de predicción
+@Autores: Pablo González, José Ángel García, Erika Marlene
+
+@export: Clase ModelController
+*/
+
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
 import bd from "../models";
-
 
 class ModelController extends AbstractController {
   protected validateBody(type: any) {

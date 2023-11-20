@@ -1,3 +1,10 @@
+/* 
+@Description: Controlador de rutas para la interacción con el status
+@Autores: Pablo González, José Ángel García, Erika Marlene
+
+@export: Clase StatusController
+*/
+
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
 
@@ -29,15 +36,20 @@ class StatusController extends AbstractController {
       "/getMatrizDiferencias",
       this.getMatrizDiferencias.bind(this)
     );
+    this.router.get("/getFechasStatus", this.getFechasStatus.bind(this));
     this.router.get(
-      "/getFechasStatus",
-      this.getFechasStatus.bind(this)
+      "/getMostFailedProduct/:idAcomodador",
+      this.mostFailedProduct.bind(this)
     );
-    this.router.get("/getMostFailedProduct/:idAcomodador", this.mostFailedProduct.bind(this));
-    this.router.get("/getNumberScanns/:idAcomodador", this.numberScanns.bind(this));
-    this.router.get("/getNumberScannsProducts/:idAcomodador", this.numberScannsProducts.bind(this));
+    this.router.get(
+      "/getNumberScanns/:idAcomodador",
+      this.numberScanns.bind(this)
+    );
+    this.router.get(
+      "/getNumberScannsProducts/:idAcomodador",
+      this.numberScannsProducts.bind(this)
+    );
     this.router.get("/getAccuracy/:idAcomodador", this.accuracy.bind(this));
-
   }
   private async postComparedPhotos(req: Request, res: Response) {
     const {
@@ -131,23 +143,32 @@ class StatusController extends AbstractController {
     }
   }
   private async getFechasStatus(req: Request, res: Response) {
-    const { Op } = require('sequelize');
+    const { Op } = require("sequelize");
     try {
       const fechasUnicas = await bd.Status.findAll({
         attributes: [
-          [bd.Sequelize.fn("DATE_FORMAT", bd.Sequelize.col("fecha"), "%Y-%m-%d"), "fecha"],
+          [
+            bd.Sequelize.fn(
+              "DATE_FORMAT",
+              bd.Sequelize.col("fecha"),
+              "%Y-%m-%d"
+            ),
+            "fecha",
+          ],
         ],
-        group: [bd.Sequelize.fn("DATE_FORMAT", bd.Sequelize.col("fecha"), "%Y-%m-%d")],
+        group: [
+          bd.Sequelize.fn("DATE_FORMAT", bd.Sequelize.col("fecha"), "%Y-%m-%d"),
+        ],
         order: [["fecha", "ASC"]],
         raw: true,
       });
-  
+
       const resultados = [];
-  
+
       for (const fecha of fechasUnicas) {
         const fechaInicio = `${fecha.fecha} 00:00:00`;
         const fechaFin = `${fecha.fecha} 23:59:59`;
-  
+
         let primerDesacomodado = await bd.Status.findOne({
           attributes: ["fecha", "estado"],
           where: {
@@ -171,7 +192,7 @@ class StatusController extends AbstractController {
             order: [["fecha", "ASC"]],
           });
         }
-  
+
         const primerAcomodado = await bd.Status.findOne({
           attributes: ["fecha", "estado"],
           where: {
@@ -192,7 +213,7 @@ class StatusController extends AbstractController {
           timestamp,
         });
       }
-  
+
       res.json(resultados);
     } catch (error) {
       console.error("Error al obtener las fechas:", error);
@@ -204,9 +225,7 @@ class StatusController extends AbstractController {
     const { idAcomodador } = req.params;
     try {
       const matrizProductosF = await bd.Status.findAll({
-        attributes: [
-          "matrizProductosF",
-        ],
+        attributes: ["matrizProductosF"],
         where: {
           id_acomodador: idAcomodador,
           estado: "desacomodado",
@@ -222,7 +241,6 @@ class StatusController extends AbstractController {
           }
         }
       }
-
 
       const mostFailedProduct = matrices.reduce((acc, curr) => {
         if (acc[curr] === undefined) {
@@ -241,7 +259,7 @@ class StatusController extends AbstractController {
 
       let product = mostFailedProductArray[0][0];
 
-      res.json({product: product});
+      res.json({ product: product });
     } catch (error) {
       res.status(500).send(error);
     }
@@ -259,7 +277,7 @@ class StatusController extends AbstractController {
         },
       });
 
-      res.json({"numberScanns": numberScanns[0].dataValues.conteo});
+      res.json({ numberScanns: numberScanns[0].dataValues.conteo });
     } catch (error) {
       res.status(500).send(error);
     }
@@ -269,9 +287,7 @@ class StatusController extends AbstractController {
     const { idAcomodador } = req.params;
     try {
       const numberScannsProducts = await bd.Status.findAll({
-        attributes: [
-          "matrizDiferencias"
-        ],
+        attributes: ["matrizDiferencias"],
         where: {
           id_acomodador: idAcomodador,
         },
@@ -287,12 +303,12 @@ class StatusController extends AbstractController {
         }
       }
 
-      res.json({"numberScannsProducts": matrices.length});
+      res.json({ numberScannsProducts: matrices.length });
     } catch (error) {
       res.status(500).send(error);
     }
   }
-  
+
   private async accuracy(req: Request, res: Response) {
     const { idAcomodador } = req.params;
     try {
@@ -316,11 +332,15 @@ class StatusController extends AbstractController {
         },
       });
 
-      const accuracy = (acomodados[0].dataValues.conteo / (acomodados[0].dataValues.conteo + desacomodados[0].dataValues.conteo))*100;
+      const accuracy =
+        (acomodados[0].dataValues.conteo /
+          (acomodados[0].dataValues.conteo +
+            desacomodados[0].dataValues.conteo)) *
+        100;
 
       const accuracyRounded = Math.round(accuracy * 100) / 100;
 
-      res.json({"accuracy": accuracyRounded});
+      res.json({ accuracy: accuracyRounded });
     } catch (error) {
       res.status(500).send(error);
     }

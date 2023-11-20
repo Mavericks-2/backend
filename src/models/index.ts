@@ -1,3 +1,8 @@
+/* 
+@Description: Modelo de la tabla status
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 "use strict";
 
 import fs from "fs";
@@ -22,7 +27,6 @@ if (env === "development") {
         timestamps: false,
         freezeTableName: true,
       },
-      
     }
   );
 } else if (env === "test") {
@@ -37,7 +41,6 @@ if (env === "development") {
         timestamps: false,
         freezeTableName: true,
       },
-      
     }
   );
 } else if (env === "production") {
@@ -52,7 +55,6 @@ if (env === "development") {
         timestamps: false,
         freezeTableName: true,
       },
-      
     }
   );
 }

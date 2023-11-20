@@ -1,3 +1,8 @@
+/* 
+@Description: Middleware para validar errores
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 

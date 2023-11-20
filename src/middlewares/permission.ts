@@ -1,3 +1,8 @@
+/* 
+@Description: Middleware para verificar permisos de usuario
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 import { Response, Request, NextFunction } from "express";
 // Models
 import { HydratedDocument } from "mongoose";

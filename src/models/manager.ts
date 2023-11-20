@@ -29,7 +29,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     awsCognitoId!: string;
     role!: string;
     id_admin!: UUID;
-    static associate(models:any) {
+    static associate(models: any) {
       // define association here
       Manager.belongsTo(models.Admin, {
         foreignKey: "id_admin",
@@ -39,7 +39,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
   Manager.init(
     {
-     id_manager: {
+      id_manager: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
