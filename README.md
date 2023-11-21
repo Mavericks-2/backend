@@ -18,7 +18,6 @@ Integrantes:
 - [Node JS](https://nodejs.org/es/) - v18.15.0
 - [Express](https://expressjs.com/es/) - v4.17.1
 - [TypeScript](https://www.typescriptlang.org/) - v4.4.4
-- [Aws-sdk](https://www.npmjs.com/package/aws-sdk) - v2.1038.0
 
 ## Requisitos del sistema
 
@@ -27,21 +26,6 @@ Integrantes:
 - [Git](https://git-scm.com/)
 - [MySQL](https://www.mysql.com/) - v8.0.27
 - [Python](https://www.python.org/) - v3.9.7
-- Variables de entorno:
-  - DB_TYPE
-  - DB_HOST
-  - DB_PORT
-  - DB_USERNAME
-  - DB_PASSWORD
-  - DB_DATABASE
-  - IMAGE_BASE_URL
-  - AWS_REGION
-  - AWS_ACCESS_KEY
-  - AWS_SECRET_ACCESS_KEY
-  - AWS_SESSION_TOKEN
-  - COGNITO_APP_CLIENT_ID
-  - COGNITO_APP_SECRET_HASH
-  - COGNITO_USER_POOL_ID
 
 ## Instalación
 
