@@ -49,6 +49,10 @@ npm run build:start
 
 4. Abrir el navegador en la dirección [http://localhost:8080](http://localhost:8080)
 
+## Diagrama Entidad-Relación (MySQL)
+
+<img src="./DiagramaER.PNG" alt="Diagrama ER" width="100%"/>
+
 ## Documentación de rutas
 
 ### Rutas de autenticación
