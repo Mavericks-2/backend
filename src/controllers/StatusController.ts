@@ -190,7 +190,7 @@ class StatusController extends AbstractController {
           });
         }
 
-        const primerAcomodado = await bd.Status.findOne({
+        let primerAcomodado = await bd.Status.findOne({
           attributes: ["fecha", "estado"],
           where: {
             estado: "acomodado",
@@ -200,9 +200,20 @@ class StatusController extends AbstractController {
           },
           order: [["fecha", "ASC"]],
         });
-        // Calculamos el timestamp
-        let timestamp = primerAcomodado.fecha - primerDesacomodado.fecha;
+
+        let timestamp;
+        if (primerAcomodado) {
+          timestamp = primerAcomodado.fecha - primerDesacomodado.fecha;
+        } else {
+          timestamp = 0;
+          primerAcomodado = {
+            fecha: primerDesacomodado.fecha,
+            estado: "acomodado",
+          };
+        }
+  
         timestamp = timestamp / 60000;
+
         resultados.push({
           fecha: fecha.fecha,
           primerDesacomodado,
