@@ -1,3 +1,10 @@
+/* 
+@Description: Clase abstracta para la creación de controladores de rutas
+@Autores: Pablo González, José Ángel García, Erika Marlene
+
+@export: Clase AbstractController
+*/
+
 import { Router } from "express";
 
 // Middlewares
@@ -37,15 +44,18 @@ export default abstract class AbstractController {
   protected abstract validateBody(type: any): any;
 
   protected convertLongTextToJSON(element: any) {
-    const newElement : any = {...element}; 
+    const newElement: any = { ...element };
     Object.keys(newElement).forEach((key) => {
       if (typeof newElement[key] === "string") {
-        if (newElement[key].startsWith("{") || newElement[key].startsWith("[")) {
+        if (
+          newElement[key].startsWith("{") ||
+          newElement[key].startsWith("[")
+        ) {
           newElement[key] = JSON.parse(newElement[key].replace(/'/g, '"'));
         }
       }
     });
-    
+
     return newElement;
   }
 }

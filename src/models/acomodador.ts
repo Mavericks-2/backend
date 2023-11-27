@@ -1,3 +1,8 @@
+/* 
+@Description: Modelo de la tabla acomodador
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 "use strict";
 
 import { Model } from "sequelize";
@@ -21,7 +26,10 @@ export enum Roles {
   ACOMODADOR = "ACOMODADOR",
 }
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Acomodador extends Model<AcomodadorAttributes> implements AcomodadorAttributes {
+  class Acomodador
+    extends Model<AcomodadorAttributes>
+    implements AcomodadorAttributes
+  {
     id_acomodador!: UUID;
     nombre!: string;
     apellido!: string;
@@ -29,7 +37,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     awsCognitoId!: string;
     role!: string;
     id_manager!: UUID;
-    static associate(models:any) {
+    static associate(models: any) {
       // define association here
       Acomodador.belongsTo(models.Manager, {
         foreignKey: "id_manager",
@@ -39,7 +47,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
   Acomodador.init(
     {
-     id_acomodador: {
+      id_acomodador: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,

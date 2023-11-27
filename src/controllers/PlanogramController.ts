@@ -1,3 +1,10 @@
+/* 
+@Description: Controlador de rutas para la interacción con el planograma
+@Autores: Pablo González, José Ángel García, Erika Marlene
+
+@export: Clase PlanogramController
+*/
+
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
 import { IMAGE_BASE_URL } from "../config";
@@ -42,7 +49,7 @@ class PlanogramController extends AbstractController {
 
       const random_name = Math.random().toString(36).substring(7);
 
-      const url = IMAGE_BASE_URL + random_name + "."+ type.split("/")[1];
+      const url = IMAGE_BASE_URL + random_name + "." + type.split("/")[1];
 
       let options = {
         method: "PUT",
@@ -56,7 +63,7 @@ class PlanogramController extends AbstractController {
         throw new Error("Image not found");
       }
 
-      res.status(201).send({ message: "ok", "url": response.url });
+      res.status(201).send({ message: "ok", url: response.url });
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }

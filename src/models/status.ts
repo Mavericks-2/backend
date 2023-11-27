@@ -1,3 +1,8 @@
+/* 
+@Description: Modelo de la tabla status
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 "use strict";
 
 import { UUID } from "crypto";
@@ -22,7 +27,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     matrizProductosF!: JSON;
     id_acomodador!: UUID;
     id_planogram!: UUID;
-    static associate(models:any) {
+    static associate(models: any) {
       // define association here
       Status.belongsTo(models.Planogram, {
         foreignKey: "id_planogram",

@@ -1,3 +1,8 @@
+/* 
+@Description: Servicios de cognito
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 import AWS from "aws-sdk";
 import {
   COGNITO_APP_CLIENT_ID,

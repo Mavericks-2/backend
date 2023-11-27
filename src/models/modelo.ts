@@ -1,3 +1,8 @@
+/* 
+@Description: Modelo de la tabla modelo
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 "use strict";
 
 import { UUID } from "crypto";
