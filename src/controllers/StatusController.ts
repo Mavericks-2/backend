@@ -10,6 +10,7 @@ import AbstractController from "./AbstractController";
 
 import bd from "../models";
 import acomodador from "../models";
+import { Console } from "node:console";
 
 class StatusController extends AbstractController {
   protected validateBody(type: any) {
@@ -166,15 +167,31 @@ class StatusController extends AbstractController {
       const resultados = [];
 
       for (const fecha of fechasUnicas) {
-        const fechaInicio = `${fecha.fecha} 00:00:00`;
-        const fechaFin = `${fecha.fecha} 23:59:59`;
+        // Obtener la fecha anterior y posterior
+        const fechaActual = new Date(`${fecha.fecha}`);
+        fechaActual.setHours(fechaActual.getHours() + 23);
+        fechaActual.setMinutes(fechaActual.getMinutes() + 59);
+        fechaActual.setSeconds(fechaActual.getSeconds() + 59);
+
+
+        const fechaAnterior = new Date(fechaActual);
+        const fechaPosterior = new Date(fechaActual);
+        fechaAnterior.setDate(fechaAnterior.getDate() - 1);
+        fechaPosterior.setDate(fechaPosterior.getDate() + 1);
+        fechaPosterior.setHours(fechaPosterior.getHours() - 23);
+        fechaPosterior.setMinutes(fechaPosterior.getMinutes() - 59);
+        fechaPosterior.setSeconds(fechaPosterior.getSeconds() - 59);
+      
+
+        const inicioFecha = `${fechaAnterior.toISOString()}`;
+        const finFecha = `${fechaPosterior.toISOString()}`;
 
         let primerDesacomodado = await bd.Status.findOne({
           attributes: ["fecha", "estado"],
           where: {
             estado: "desacomodado",
             fecha: {
-              [Op.between]: [fechaInicio, fechaFin],
+              [Op.between]: [inicioFecha, finFecha],
             },
           },
           order: [["fecha", "ASC"]],
@@ -186,26 +203,37 @@ class StatusController extends AbstractController {
             where: {
               estado: "acomodado",
               fecha: {
-                [Op.between]: [fechaInicio, fechaFin],
+                [Op.between]: [inicioFecha, finFecha],
               },
             },
             order: [["fecha", "ASC"]],
           });
         }
 
-        const primerAcomodado = await bd.Status.findOne({
+        let primerAcomodado = await bd.Status.findOne({
           attributes: ["fecha", "estado"],
           where: {
             estado: "acomodado",
             fecha: {
-              [Op.between]: [fechaInicio, fechaFin],
+              [Op.between]: [inicioFecha, finFecha],
             },
           },
           order: [["fecha", "ASC"]],
         });
-        // Calculamos el timestamp
-        let timestamp = primerAcomodado.fecha - primerDesacomodado.fecha;
+
+        let timestamp;
+        if (primerAcomodado) {
+          timestamp = primerAcomodado.fecha - primerDesacomodado.fecha;
+        } else {
+          timestamp = 0;
+          primerAcomodado = {
+            fecha: primerDesacomodado.fecha,
+            estado: "acomodado",
+          };
+        }
+  
         timestamp = timestamp / 60000;
+
         resultados.push({
           fecha: fecha.fecha,
           primerDesacomodado,
