@@ -11,6 +11,7 @@ interface Planogramttributes {
   id_manager: UUID;
   matriz_productos: JSON;
   lineas: JSON;
+  accuracy: number;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -25,6 +26,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id_manager!: UUID;
     matriz_productos!: JSON;
     lineas!: JSON;
+    accuracy!: number;
     static associate(models:any) {
       // define association here
       Planogram.belongsTo(models.Manager, {
@@ -65,6 +67,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
       lineas: {
         type: DataTypes.JSON,
         allowNull: false,
+      },
+      accuracy: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        defaultValue: 100.0,
       },
     }, 
     {
