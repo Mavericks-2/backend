@@ -70,7 +70,7 @@ class PlanogramController extends AbstractController {
   }
 
   private async postPlanogramConfig(req: Request, res: Response) {
-    const { url_imagen, id_manager, coordenadas, matriz_productos, lineas } =
+    const { url_imagen, id_manager, coordenadas, matriz_productos, lineas, accuracy } =
       req.body;
     try {
       const planogram = await bd.Planogram.create({
@@ -79,6 +79,7 @@ class PlanogramController extends AbstractController {
         id_manager: id_manager,
         matriz_productos: matriz_productos,
         lineas: lineas,
+        accuracy: accuracy,
       });
 
       if (!planogram) {
