@@ -1,3 +1,8 @@
+/* 
+@Description: Middleware para la autenticación de usuarios
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 import { Response, Request, NextFunction } from "express";
 import { COGNITO_USER_POOL_ID, AWS_REGION } from "../config";
 import jwt from "jsonwebtoken";

@@ -1,3 +1,11 @@
+/* 
+@Description: Controlador de autenticación con rutas para el registro, 
+login y verificación de usuarios
+@Autores: Pablo González, José Ángel García, Erika Marlene
+
+@export: Clase AuthenticationController
+*/
+
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
 import bd from "../models";

@@ -1,3 +1,8 @@
+/* 
+@Description: Modelo de la tabla planogram
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 "use strict";
 
 import { UUID } from "crypto";
@@ -28,6 +33,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     lineas!: JSON;
     accuracy!: number;
     static associate(models:any) {
+
       // define association here
       Planogram.belongsTo(models.Manager, {
         foreignKey: "id_manager",

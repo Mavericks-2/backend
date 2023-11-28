@@ -1,3 +1,8 @@
+/* 
+@Description: Modelo de la tabla colaborador
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 "use strict";
 
 import { Model } from "sequelize";
@@ -22,7 +27,10 @@ export enum Roles {
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Colaborador extends Model<ColaboradorAttributes> implements ColaboradorAttributes {
+  class Colaborador
+    extends Model<ColaboradorAttributes>
+    implements ColaboradorAttributes
+  {
     id_colaborador!: UUID;
     nombre!: string;
     apellido!: string;
@@ -30,7 +38,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     awsCognitoId!: string;
     role!: string;
     id_manager!: UUID;
-    static associate(models:any) {
+    static associate(models: any) {
       // define association here
       Colaborador.belongsTo(models.Manager, {
         foreignKey: "id_manager",
@@ -40,7 +48,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
   Colaborador.init(
     {
-     id_colaborador: {
+      id_colaborador: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,

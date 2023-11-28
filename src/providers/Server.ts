@@ -1,3 +1,8 @@
+/* 
+@Description: Servidor de la aplicación
+@Autores: Pablo González, José Ángel García, Erika Marlene
+*/
+
 import express, { NextFunction, Request, Response } from "express";
 import AbstractController from "../controllers/AbstractController";
 import db from "../models";
@@ -33,7 +38,7 @@ class Server {
       this.app.use(`/${controller.prefix}`, controller.router);
     });
 
-    this.app.use(express.raw({ type: 'image/jpeg', limit: '10mb' })); // Adjust the limit according to your needs
+    this.app.use(express.raw({ type: "image/jpeg", limit: "10mb" })); // Adjust the limit according to your needs
   }
 
   public async init() {
