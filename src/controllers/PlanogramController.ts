@@ -39,6 +39,7 @@ class PlanogramController extends AbstractController {
       "/postPlanogramToCloud",
       this.postPlanogramToCloud.bind(this)
     );
+    this.router.get("/getAccuracy", this.getAccuracy.bind(this));
   }
 
   private async postPlanogramToCloud(req: Request, res: Response) {
@@ -119,6 +120,29 @@ class PlanogramController extends AbstractController {
       const newPlanogram = this.convertLongTextToJSON(planogram.dataValues);
 
       res.status(201).send({ planogram: newPlanogram, message: "ok" });
+    } catch (error: any) {
+      res.status(500).send({ code: error.code, message: error.message });
+    }
+  }
+
+  private async getAccuracy(req: Request, res: Response) {
+    try {
+      const planogram = await bd.Planogram.findAll({
+        order: [["createdAt", "DESC"]],
+      });
+
+      if (!planogram) {
+        throw new Error("Error retrieving planogram");
+      }
+      // Get the average accuracy
+      let sum = 0;
+      let count = 0;
+      planogram.forEach((element: any) => {
+        sum += element.accuracy;
+        count++;
+      });
+      const avg = sum/count;
+      res.status(201).send({avg});
     } catch (error: any) {
       res.status(500).send({ code: error.code, message: error.message });
     }
